@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   ImageBackground,
   StyleSheet,
@@ -12,23 +12,41 @@ const image = {
   uri: 'https://images.unsplash.com/photo-1579158950237-a1d86ef408c4?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80',
 };
 export default function Card({title, star, id}) {
+  const [favoris, setFavoris] = useState(false);
   const navigation = useNavigation();
+
+  const handlefavorite = () => {
+    setFavoris(!favoris);
+  };
+
   return (
     <View style={style.containerCard}>
       <ImageBackground
         imageStyle={{borderRadius: 25}}
         source={image}
         style={style.image}>
-        <TouchableOpacity style={style.star}>
-          <Image
-            style={style.imageStar}
-            source={require('../../../assets/Favoris-ok.png')}
-          />
-        </TouchableOpacity>
+        {favoris ? (
+          <TouchableOpacity
+            id={id}
+            style={style.star}
+            onPress={() => handlefavorite()}>
+            <Image
+              style={style.imageStar}
+              source={require('../../../assets/Favoris-ok.png')}
+            />
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity style={style.star} onPress={() => handlefavorite()}>
+            <Image
+              style={style.imageStar}
+              source={require('../../../assets/Favoris-no.png')}
+            />
+          </TouchableOpacity>
+        )}
       </ImageBackground>
       <TouchableOpacity
         style={style.button}
-        onPress={() => navigation.navigate('Fiche terrain')}>
+        onPress={() => navigation.navigate('Fiche terrain', {id: id})}>
         <Text style={style.name}>{title}</Text>
       </TouchableOpacity>
     </View>
