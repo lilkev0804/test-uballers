@@ -7,10 +7,10 @@
  */
 
 import * as React from 'react';
-import {View, Text} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import PlaygroundList from './src/screens/PlaygroundList';
+import PlaygroundProfile from './src/screens/PlaygroundProfile';
 
 const Stack = createStackNavigator();
 
@@ -30,6 +30,7 @@ function App() {
           },
         }}>
         <Stack.Screen name="Liste des terrains" component={PlaygroundList} />
+        <Stack.Screen name="Fiche terrain" component={PlaygroundProfile} />
       </Stack.Navigator>
     </NavigationContainer>
   );

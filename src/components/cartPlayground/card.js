@@ -7,11 +7,12 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
-
+import {useNavigation} from '@react-navigation/native';
 const image = {
   uri: 'https://images.unsplash.com/photo-1579158950237-a1d86ef408c4?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80',
 };
-export default function Card({navigation, title, star}) {
+export default function Card({title, star, id}) {
+  const navigation = useNavigation();
   return (
     <View style={style.containerCard}>
       <ImageBackground
@@ -27,7 +28,7 @@ export default function Card({navigation, title, star}) {
       </ImageBackground>
       <TouchableOpacity
         style={style.button}
-        onPress={() => navigation.navigate('PlayGround')}>
+        onPress={() => navigation.navigate('Fiche terrain')}>
         <Text style={style.name}>{title}</Text>
       </TouchableOpacity>
     </View>
@@ -74,7 +75,6 @@ const style = StyleSheet.create({
     color: 'white',
     fontSize: 18,
     textAlign: 'center',
-    fontFamily: 'Lato',
   },
   star: {
     position: 'absolute',
