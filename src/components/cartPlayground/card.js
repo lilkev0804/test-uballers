@@ -4,21 +4,27 @@ import {
   StyleSheet,
   View,
   Text,
-  Button,
+  Image,
   TouchableOpacity,
 } from 'react-native';
 
 const image = {
   uri: 'https://images.unsplash.com/photo-1579158950237-a1d86ef408c4?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80',
 };
-export default function Card({navigation, title}) {
+export default function Card({navigation, title, star}) {
   return (
     <View style={style.containerCard}>
       <ImageBackground
         imageStyle={{borderRadius: 25}}
         source={image}
-        style={style.image}></ImageBackground>
-
+        style={style.image}>
+        <TouchableOpacity style={style.star}>
+          <Image
+            style={style.imageStar}
+            source={require('../../../assets/Favoris-ok.png')}
+          />
+        </TouchableOpacity>
+      </ImageBackground>
       <TouchableOpacity
         style={style.button}
         onPress={() => navigation.navigate('PlayGround')}>
@@ -68,5 +74,16 @@ const style = StyleSheet.create({
     color: 'white',
     fontSize: 18,
     textAlign: 'center',
+    fontFamily: 'Lato',
+  },
+  star: {
+    position: 'absolute',
+    zIndex: 100,
+    top: 10,
+    right: 10,
+  },
+  imageStar: {
+    width: 30,
+    height: 30,
   },
 });
