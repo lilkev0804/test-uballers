@@ -13,16 +13,17 @@ const image = {
   uri: 'https://images.unsplash.com/photo-1579158950237-a1d86ef408c4?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80',
 };
 
-function Card({title, id}) {
+export default function Card({title, id, props}) {
   const [favoris, setFavoris] = useState(false);
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
-  const handlefavorite = e => {
-    setFavoris(!favoris);
-    const action = {type: 'TOGGLE_FAV', value: 'favorite'};
-    dispatch(action);
-  };
+  // const handlefavorite = e => {
+  //   setFavoris(!favoris);
+  //   const action = {type: 'TOGGLE_FAV', value: 'add-3'};
+  //   dispatch(action);
+  //   // console.log(e.currentTarget);
+  // };
 
   return (
     <View style={style.containerCard}>
@@ -30,11 +31,11 @@ function Card({title, id}) {
         imageStyle={{borderRadius: 25}}
         source={image}
         style={style.image}>
-        {favoris ? (
+        {/* {favoris ? (
           <TouchableOpacity
             id={id}
             style={style.star}
-            onPress={() => handlefavorite()}>
+            onPress={e => handlefavorite(e)}>
             <Image
               style={style.imageStar}
               source={require('../../../assets/Favoris-ok.png')}
@@ -44,14 +45,14 @@ function Card({title, id}) {
           <TouchableOpacity
             style={style.star}
             id={id}
-            onPress={() => handlefavorite()}>
+            onPress={id => handlefavorite(id)}>
             <Image
               id={id}
               style={style.imageStar}
               source={require('../../../assets/Favoris-no.png')}
             />
           </TouchableOpacity>
-        )}
+        )} */}
       </ImageBackground>
       <TouchableOpacity
         style={style.button}
@@ -82,7 +83,6 @@ const style = StyleSheet.create({
     borderRadius: 25,
     backgroundColor: 'white',
   },
-
   image: {
     flex: 1,
     height: 150,
@@ -114,10 +114,10 @@ const style = StyleSheet.create({
     height: 30,
   },
 });
-
-const mapStateToProps = state => {
-  return {
-    favoristesPlayGround: state.favoristesPlayGround,
-  };
-};
-export default connect(mapStateToProps)(Card);
+// const mapStateToProps = state => {
+//   // console.log(state);
+//   return {
+//     favoristesPlayGround: state.favoristesPlayGround,
+//   };
+// };
+// export default connect(mapStateToProps)(Card);

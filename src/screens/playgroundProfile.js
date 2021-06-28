@@ -7,41 +7,44 @@ import {
   Text,
   TouchableOpacity,
 } from 'react-native';
-
+import {connect, useDispatch} from 'react-redux';
 import data from '../groundsData.json';
 
-export default function PlaygroundProfile({route, navigation}) {
+function PlaygroundProfile({route, favoristesPlayGround}) {
   const {id} = route.params;
+  const [favoris, setFavoris] = useState(false);
   const [playGround, setPlayGround] = useState([]);
-  const [favoris, setfavoris] = useState(false);
+
+  const dispatch = useDispatch();
   useEffect(() => {
     data.allGrounds.map(ground =>
       ground.groundId === id ? setPlayGround(ground) : console.log('error'),
     );
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [favoristesPlayGround]);
 
-  const handlefavorite = () => {
-    setfavoris(!favoris);
+  const handlefavorite = e => {
+    setFavoris(!favoris);
+    const action = {type: 'TOGGLE_FAV', value: playGround.groundName};
+    dispatch(action);
+  };
+  console.log('return : ' + favoristesPlayGround);
+
+  const changeImg = () => {
+    var sourceImage = require('../../assets/Favoris-no.png');
+    if (favoristesPlayGround.includes(playGround.groundName)) {
+      // Film dans nos favoris
+      sourceImage = require('../../assets/Favoris-ok.png');
+    }
+    return <Image style={style.favorite} source={sourceImage} />;
   };
 
   return (
     <ScrollView>
       <View style={style.containerFavorite}>
-        {favoris ? (
-          <TouchableOpacity onPress={() => handlefavorite()}>
-            <Image
-              style={style.favorite}
-              source={require('../../assets/Favoris-ok.png')}
-            />
-          </TouchableOpacity>
-        ) : (
-          <TouchableOpacity onPress={() => handlefavorite()}>
-            <Image
-              style={style.favorite}
-              source={require('../../assets/Favoris-no.png')}
-            />
-          </TouchableOpacity>
-        )}
+        <TouchableOpacity onPress={() => handlefavorite()}>
+          {changeImg()}
+        </TouchableOpacity>
       </View>
       <View style={style.containerTitle}>
         <Image
@@ -107,6 +110,8 @@ const style = StyleSheet.create({
   favorite: {
     marginRight: 15,
     marginTop: 15,
+    borderColor: 'red',
+    borderWidth: 2,
   },
   containerTitle: {
     width: 300,
@@ -150,3 +155,11 @@ const style = StyleSheet.create({
     marginLeft: 10,
   },
 });
+
+const mapStateToProps = state => {
+  return {
+    favoristesPlayGround: state.favoristesPlayGround,
+  };
+};
+
+export default connect(mapStateToProps)(PlaygroundProfile);

@@ -2,42 +2,30 @@ import React, {useState} from 'react';
 import {
   StyleSheet,
   ScrollView,
-  Image,
+  Text,
   TouchableOpacity,
   View,
-  Text,
 } from 'react-native';
-import RadioForm, {
-  RadioButton,
-  RadioButtonInput,
-  RadioButtonLabel,
-} from 'react-native-simple-radio-button';
+import RadioForm from 'react-native-simple-radio-button';
 import data from '../groundsData.json';
 import {useNavigation} from '@react-navigation/native';
-import {connect} from 'react-redux';
+
 import Card from '../components/cartPlayground/Card';
 
-function PlaygroundList() {
+export default function PlaygroundList() {
   const navigation = useNavigation();
-  const [filter, setFilter] = useState(false);
-  const [myFilter, setMyFilter] = useState();
-  const [visible, setVisible] = useState(false);
-
-  const toggleOverlay = () => {
-    setVisible(!visible);
-  };
+  const [myFilter, setMyFilter] = useState('all');
 
   let radio_props = [
-    {label: 'Publics', value: 0},
-    {label: 'Privés', value: 1},
-    {label: 'Tous les terrains', value: 2},
+    {label: 'Tous les terrains', value: 0},
+    {label: 'Public', value: 1},
+    {label: 'Privé', value: 2},
   ];
 
   const handleFilter = value => {
-    setFilter(true);
-    if (value === 0) {
+    if (value === 1) {
       setMyFilter('public');
-    } else if (value === 1) {
+    } else if (value === 2) {
       setMyFilter('prive');
     } else {
       setMyFilter('all');
@@ -48,36 +36,21 @@ function PlaygroundList() {
     <ScrollView style={style.containerAllGround}>
       <View style={style.containerHeader}>
         <TouchableOpacity onPress={() => navigation.navigate('Favoris')}>
-          <Image
-            style={style.filter}
-            source={require('../../assets/profile.png')}
-          />
+          <Text style={style.favoris}>Mes favoris</Text>
         </TouchableOpacity>
       </View>
+      <View style={style.containerRadio}>
+        <RadioForm
+          radio_props={radio_props}
+          initial={0}
+          formHorizontal={true}
+          labelHorizontal={true}
+          buttonColor={'#DC691D'}
+          animation={true}
+          onPress={value => handleFilter(value)}
+        />
+      </View>
 
-      <RadioForm
-        radio_props={radio_props}
-        initial={0}
-        formHorizontal={true}
-        labelHorizontal={true}
-        buttonColor={'#DC691D'}
-        animation={true}
-        onPress={value => handleFilter(value)}
-      />
-
-      {/* {filter
-        ? data.allGrounds.filter((ground, i) =>
-            ground.limit === '' ? console.log(ground) : null,
-          )
-        : data.allGrounds.map((ground, i) => (
-            <Card
-              key={i}
-              id={ground.groundId}
-              image="Localisation.png"
-              title={ground.groundName}
-              star
-            />
-          ))} */}
       {myFilter === 'all'
         ? data.allGrounds.map((ground, i) => (
             <Card
@@ -90,7 +63,7 @@ function PlaygroundList() {
           ))
         : myFilter === 'public'
         ? data.allGrounds.map((ground, i) =>
-            ground.limit === 'public' || ground.limit === '' ? (
+            ground.limit === 'public' ? (
               <Card
                 key={i}
                 id={ground.groundId}
@@ -121,25 +94,19 @@ const style = StyleSheet.create({
   },
   containerHeader: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
     paddingLeft: 20,
     paddingRight: 20,
   },
-  filter: {
+  favoris: {
     flex: 1,
     marginTop: 24,
+    marginBottom: 18,
+    fontSize: 20,
   },
-  btnFilter: {
-    backgroundColor: 'green',
-    borderColor: 'red',
-    borderWidth: 2,
+  containerRadio: {
+    marginTop: 5,
+    alignItems: 'center',
+    justifyContent: 'space-around',
   },
 });
-
-const mapStateToProps = state => {
-  return {
-    favoristesPlayGround: state.favoristesPlayGround,
-  };
-};
-
-export default connect(mapStateToProps)(PlaygroundList);
