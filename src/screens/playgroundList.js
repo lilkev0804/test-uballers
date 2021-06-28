@@ -7,10 +7,11 @@ import {
   View,
 } from 'react-native';
 import data from '../groundsData.json';
-
+import {useNavigation} from '@react-navigation/native';
 import Card from '../components/cartPlayground/Card';
 
 export default function PlaygroundList() {
+  const navigation = useNavigation();
   const [visible, setVisible] = useState(false);
   const toggleOverlay = () => {
     setVisible(!visible);
@@ -18,7 +19,7 @@ export default function PlaygroundList() {
   return (
     <ScrollView style={style.containerAllGround}>
       <View style={style.containerHeader}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('Favoris')}>
           <Image
             style={style.filter}
             source={require('../../assets/profile.png')}
