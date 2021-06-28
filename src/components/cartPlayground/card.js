@@ -8,15 +8,20 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import {connect, useDispatch} from 'react-redux';
 const image = {
   uri: 'https://images.unsplash.com/photo-1579158950237-a1d86ef408c4?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80',
 };
-export default function Card({title, star, id}) {
+
+function Card({title, id}) {
   const [favoris, setFavoris] = useState(false);
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
-  const handlefavorite = () => {
+  const handlefavorite = e => {
     setFavoris(!favoris);
+    const action = {type: 'TOGGLE_FAV', value: 'favorite'};
+    dispatch(action);
   };
 
   return (
@@ -36,8 +41,12 @@ export default function Card({title, star, id}) {
             />
           </TouchableOpacity>
         ) : (
-          <TouchableOpacity style={style.star} onPress={() => handlefavorite()}>
+          <TouchableOpacity
+            style={style.star}
+            id={id}
+            onPress={() => handlefavorite()}>
             <Image
+              id={id}
               style={style.imageStar}
               source={require('../../../assets/Favoris-no.png')}
             />
@@ -105,3 +114,10 @@ const style = StyleSheet.create({
     height: 30,
   },
 });
+
+const mapStateToProps = state => {
+  return {
+    favoristesPlayGround: state.favoristesPlayGround,
+  };
+};
+export default connect(mapStateToProps)(Card);
